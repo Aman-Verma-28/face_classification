@@ -1,7 +1,9 @@
-from flask import Flask, jsonify, make_response, request, abort, redirect, send_file
+from flask import Flask, jsonify, make_response, request, abort, redirect
 import logging
 
 import emotion_gender_processor as eg_processor
+import flask
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -14,7 +16,7 @@ def upload():
     try:
         image = request.files['image'].read()
         eg_processor.process_image(image)
-        return send_file('/ekholabs/face-classifier/result/predicted_image.png', mimetype='image/png')
+        return flask.send_from_directory((p := Path('/ekholabs/face-classifier/result/predicted_image.png')).parent, p.name, mimetype='image/png')
     except Exception as err:
         logging.error('An error has occurred whilst processing the file: "{0}"'.format(err))
         abort(400)
