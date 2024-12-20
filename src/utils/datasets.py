@@ -1,9 +1,9 @@
 from scipy.io import loadmat
 import pandas as pd
 import numpy as np
-from random import shuffle
 import os
 import cv2
+import secrets
 
 
 class DataManager(object):
@@ -129,7 +129,7 @@ def get_class_to_arg(dataset_name='fer2013'):
 def split_imdb_data(ground_truth_data, validation_split=.2, do_shuffle=False):
     ground_truth_keys = sorted(ground_truth_data.keys())
     if do_shuffle is not False:
-        shuffle(ground_truth_keys)
+        secrets.SystemRandom().shuffle(ground_truth_keys)
     training_split = 1 - validation_split
     num_train = int(training_split * len(ground_truth_keys))
     train_keys = ground_truth_keys[:num_train]
